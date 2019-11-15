@@ -9,3 +9,4 @@ pyvenv.cfg
 notes.txt
 walkdir_test.py
 test*.*
+.gitignore
