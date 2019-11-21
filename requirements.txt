@@ -1,1 +1,1 @@
-exifread==2.1.2
+pyexiv2=0.7.1

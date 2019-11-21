@@ -8,7 +8,7 @@ import shutil
 import re
 import sys
 
-import exifread
+import pyexiv2
 
 #########################################
 
@@ -52,15 +52,16 @@ def create_logger(logger_name: str, dest_folder: str, name_file: str) -> logging
 
 def copy_photos(filename: str, source_folder: str, dest_folder: str):
     try:
-        file = open(source_folder+filename, 'rb')
-        tags = exifread.process_file(file)
-        creation_str = str(tags['EXIF DateTimeOriginal'])
+        metadata = pyexiv2.ImageMetadata(source_folder+filename)
+        metadata.read()
+        tag = metadata['Exif.Image.DateTime']
+        creation_date = tag.value.date()
         
-        del tags
-        del file
+        del metadata
+        del tag
         
-        creation_date = datetime.strptime(creation_str, '%Y:%m:%d %H:%M:%S')
-        folder_name = str(creation_date.date())
+        folder_name = str(creation_date)
+
         new_directory = dest_folder + folder_name + '/'
 
         try:
